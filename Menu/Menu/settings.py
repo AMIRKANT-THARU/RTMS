@@ -13,7 +13,10 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 from pathlib import Path
 from decouple import config
 import os
-import django_heroku
+try:
+    import django_heroku
+except Exception:
+    django_heroku = None
 import dj_database_url
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -31,7 +34,6 @@ ALLOWED_HOSTS = ['*','127.0.0.1', 'localhost', ]
 
 # Application definition
 INSTALLED_APPS = [
-    'unfold',  # Modern admin UI
     "whitenoise.runserver_nostatic",  # Use whitenoise for static files in production
     'daphne',
     'django.contrib.admin',
@@ -48,6 +50,14 @@ INSTALLED_APPS = [
     'allauth.socialaccount',
     'social_django',
 ]
+
+# Make `unfold` optional (modern admin UI). If present, insert it at the front.
+try:
+    import importlib.util
+    if importlib.util.find_spec('unfold') is not None:
+        INSTALLED_APPS.insert(0, 'unfold')
+except Exception:
+    pass
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -148,7 +158,8 @@ STATIC_ROOT = BASE_DIR / 'staticfiles'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
 ]
-django_heroku.settings(locals())
+if django_heroku:
+    django_heroku.settings(locals())
 MEDIA_ROOT = BASE_DIR/'media'
 MEDIA_URL = '/media/'
 

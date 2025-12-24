@@ -25,6 +25,11 @@ Menu/.env
 Menu/*.env
 Menu/*.env.local
 
+# Virtual Environment
+.venv/
+venv/
+env/
+
 # VSCode settings
 .vscode/
 

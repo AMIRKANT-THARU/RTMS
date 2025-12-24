@@ -889,10 +889,7 @@ def sales_report(request):
     }
     return render(request, 'main/sales_report.html', context)
 
-@login_required
-=======
 @login_required(login_url='login')
->>>>>>> 95b9c2699302927ffeecbb06c6f802d4a237db87
 def admin_dashboard(request):
     """Admin dashboard for managing restaurant."""
     if not request.user.is_staff:
